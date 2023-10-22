@@ -1,1 +1,39 @@
 \section{State Process Model Design}\label{sec:state-process-model-design}
+This section describes the state process model and its most important data structures for the permission request process in EDDIE\@.
+The state process model should be able to model in an abstract way the permission process for getting access to energy related data in different countries.
+
+\subsection{Permission Request}\label{subsec:permission-request}
+The permission request differs between the countries, but there are a few attributes that each country should have in common or are needed by EDDIE in all cases.
+Those attributes are shown in the figure\ \ref{fig:permission-request}.
+The most basic permission request consists of two identifiers and a timeframe for the data that should be requested.
+For example, if data from the last six months is required, the start date would be six months in the past and the end date would be the day before today.
+The \texttt{permissionId} is used by the permission request process model and EDDIE internally.
+It identifies the different states of the permission request with the same starting permission request.
+Last, the \texttt{connectionId} is an identifier given by the eligible party.
+It identifies entities in the eligible partys system with a permission request.
+For example, the \texttt{connectionId} could be an email address of a user of the eligible partys offered services.
+This identifier is optional, since not every use case requires the eligible party to know who is giving them their data.
+
+
+\begin{figure}[h]
+    \includegraphics[scale=0.5]{./assets/permission-request}
+    \caption{Permission Request}
+    \label{fig:permission-request}
+\end{figure}
+
+\subsection{State Process Model}\label{subsec:state-process-model}
+The state process model is the part that brings everything together.
+All permission requests that are sent to EDDIE have a state in the process model.
+There are many different states, so the process model can generalize all the different permission request processes that are implemented in different countries.
+The permission request is initially in the created-state as can be seen in the figure\ \ref{fig:process-model}.
+After it is created, EDDIE validates the permission request and checks for errors in the request.
+One such error can be that the start date is after the end date.
+If the request cannot be validated successfully, it will be moved to the malformed-state.
+This state indicates that EDDIE cannot send the permission request to the permission administrator and is a final state.
+
+
+\begin{figure}[h]
+    \includegraphics[scale=0.5]{./assets/process-model}
+    \caption{Process Model}
+    \label{fig:process-model}
+\end{figure}

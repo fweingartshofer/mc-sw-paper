@@ -1,0 +1,11 @@
+@startuml
+'!theme plain
+hide methods
+
+abstract class PermissionRequest {
+  permissionId: String
+  connectionId: String <<Nullable>>
+  start: Date
+  end: Date
+}
+@enduml
