@@ -26,14 +26,83 @@ The state process model is the part that brings everything together.
 All permission requests that are sent to EDDIE have a state in the process model.
 There are many different states, so the process model can generalize all the different permission request processes that are implemented in different countries.
 The permission request is initially in the created-state as can be seen in the figure\ \ref{fig:process-model}.
-After it is created, EDDIE validates the permission request and checks for errors in the request.
-One such error can be that the start date is after the end date.
-If the request cannot be validated successfully, it will be moved to the malformed-state.
-This state indicates that EDDIE cannot send the permission request to the permission administrator and is a final state.
-
 
 \begin{figure}[h]
-    \includegraphics[scale=0.5]{./assets/process-model}
+    \includegraphics[scale=0.3]{./assets/process-model}
     \caption{Process Model}
     \label{fig:process-model}
 \end{figure}
+
+\subsubsection{Created State}
+After it is created, EDDIE validates the permission request and checks for errors in the request.
+One such error can be that the start date is after the end date.
+If the request cannot be validated successfully, it will be moved to the malformed state.
+
+\subsubsection{Malformed State}
+This state indicates that EDDIE cannot send the permission request to the permission administrator and is a final state.
+After the malformed state, the permission request was fully processed and no permission was granted to the eligible party.
+
+\subsubsection{Validated State}
+If a permission request is successfully validated, it is moved to the validated state.
+It can be further processed and then made ready to be sent to the permission administrator.
+Sending it to the permission administrator will place the permission request in the pending permission administrator acknowledgment state.
+If the permission administrator is not reachable for any reason, the permission request is placed in the unable to send state.
+
+\subsubsection{Unable to Send State}
+The unable to send state indicates that the services of the permission administrator where not reachable at the time this permission request needed to be sent.
+It is possible to go back to the validated state to resend the permission request.
+
+\subsubsection{Pending Permission Administrator Acknowledgment State}
+When a permission request is sent to a permission administrator might send an acknowledgment that the request was successfully delivered to the permission administrator.
+Before this acknowledgment is received, the permission request will be placed in the pending permission administrator response state until an acknowledgment is delivered.
+Process models which do not implement an OAUTH flow cannot represent this state because there is no actual communication between EDDIE and the permission administrator happening.
+The ENEDIS OAUTH flow would be one example of this~\cite{enedis-dev-guide}.
+
+\subsubsection{Sent to Permission Administrator}
+When the permission administrator gets the request, they will start processing it according to their process model.
+They will check the request for validity according to their constraints.
+Some permission administrators choose to send a message to EDDIE if the request was not valid, like EDA in Austria does.
+In that case, the permission request will be placed in the invalid state.
+
+At this point, manual intervention of the end user is needed.
+They have to either accept or reject the permission request.
+One will move the permission request in the accepted state and the other in the rejected state.
+
+If the end user does neither accept nor decline the permission request, the permission request will run into a time-out.
+This will place it in the time-out state.
+
+\subsubsection{Invalid State}
+A permission request might violate the constraints of a permission administrator.
+In that case, the permission administrator can choose to inform the eligible party and therefore EDDIE via an automated message.
+An invalid state is a final state, the permission request is fully processed, and no permission is granted.
+
+\subsubsection{Rejected State}
+An end user can choose to reject a permission request from an eligible party.
+The rejected state is a final state and no permission is granted.
+
+\subsubsection{Time Out State}
+The permission request was neither accepted nor rejected, but a time-out was reached.
+The time-out state is a final state, and the permission administrator does not grant permission to access data from an end user.
+
+\subsubsection{Rejected State}
+This state indicates that the end user rejected the permission request.
+This is again a final state, and no permission is granted by the permission administrator.
+
+\subsubsection{Accepted State}
+The end user accepted the permission request and the permission administrator grants access to the end users requested data.
+At this point, the permission request stays active until its time limit is reached.
+The end user only grants access for a specific time period, after that the permission is automatically revoked by the permission administrator.
+If the end user wishes to do so, they can also revoke the permission earlier for any reason.
+The eligible party can also terminate an active permission for any reason.
+
+\subsubsection{Time Limit State}
+The permission ran its natural course and its time limit is reached.
+This is a final state, and the eligible party can no longer access the end users data.
+
+\subsubsection{Revoked State}
+The end user revoked the permission early, removing access to their data to the eligible party.
+This is a final state, and the eligible party can no longer access the end users data.
+
+\subsubsection{Terminated State}
+The eligible party chose to terminate the permission before its time limit was reached and can no longer access the end users data.
+This is a final state.
