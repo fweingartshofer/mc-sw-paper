@@ -1,5 +1,53 @@
 @startuml
-[*] -> Created: Permission Request
+hide members
+[*] --> Created: Permission Request
+state created_fork <<fork>>
+Created --> created_fork
+created_fork --> Validated
+created_fork --> Malformed
+Malformed --> [*]
+
+state validated_fork <<fork>>
+state "Pending\nPermission Administrator\nAcknowledgment" as ppaa
+state "Unable To Send" as uts
+
+Validated --> validated_fork
+validated_fork --> ppaa
+validated_fork --> uts
+uts --> Validated
+
+state "Sent to Permission Administrator" as spa
+ppaa --> spa
+
+state sent_fork <<fork>>
+state "Timed Out" as to
+spa --> sent_fork
+sent_fork --> Accepted
+sent_fork --> to
+sent_fork --> Rejected
+sent_fork --> Invalid
+
+state error_join <<join>>
+to --> error_join
+Rejected --> error_join
+Invalid --> error_join
+
+state accepted_fork <<fork>>
+state "Time Limit" as tl
+Accepted --> accepted_fork
+accepted_fork --> tl
+accepted_fork --> Terminated
+accepted_fork --> Revoked
+
+state success_join <<join>>
+tl --> success_join
+Terminated --> success_join
+Revoked --> success_join
+
+state done_join <<join>>
+error_join --> done_join
+success_join --> done_join
+done_join --> [*]
 
 
 @enduml
