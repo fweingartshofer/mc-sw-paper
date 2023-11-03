@@ -1,0 +1,14 @@
+@startuml
+'https://plantuml.com/class-diagram
+hide methods
+class CMRequest {
+  cmRequestId: String
+  dsoId: String
+  meteringPoint: String <<Nullable>>
+  eligiblePartyId: String <<Nullable>>
+  timestamp: DateTime
+  from: Date
+  to: Date
+}
+
+@enduml

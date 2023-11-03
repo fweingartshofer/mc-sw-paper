@@ -9,6 +9,8 @@
 \usepackage{amsmath}
 \usepackage{tikz}
 \usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{glossaries}
 
 % ACM specifics
 \setcopyright{acmcopyright}
@@ -25,6 +27,8 @@
 \acmISBN{XXX}
 
 \settopmatter{printacmref=false}
+
+\input{content/05-glossary}
 
 % Document
 \begin{document}
@@ -44,7 +48,7 @@
     \maketitle
 
     \input{content/01-introduction}
-    \input{content/02-current-state}
+    \input{content/02-related-work}
     \input{content/03-state-process-model-design}
     \input{content/04-conclusion}
 

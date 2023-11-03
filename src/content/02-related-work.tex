@@ -1,0 +1,63 @@
+\section{Related Work}\label{sec:related-work}
+This section will examine the current state of the permission request process of three different permission administrators:
+\begin{itemize}
+    \item{}Austria's EDA
+    \item{}France's Enedis
+    \item{}Spain's Datadis
+\end{itemize}
+
+The process model described in the subsection\ \ref{subsec:state-process-model} is built using the process models described here as reference.
+
+\subsection{Austria: EDA}\label{subsec:austria:-eda}
+The Energy Data Exchange (EDA) is the project and company in austria that manages the permissions to energy consumption, production and master data.
+While the first two datatypes are straight forward, master data is data about account details of a metering point.
+EDA is owned by all the austrian grid operators.
+Unlike the other permission administrators on this list, EDA does not use a pull-based model, but a pushed based approach~\cite{eda}.
+
+A push-based approach for energy consumption and production data has several consequences.
+First, if a permission request for energy data is accepted, EDA will send the energy data to the eligible party.
+This is done via the AS4 protocol\cite{eda}.
+
+The permission process or the consent process, as it is called in Austria, is based on XML documents that are sent to EDA.
+These documents and the process itself are documented at\ \href{https://www.ebutilities.at/}{https://www.ebutilities.at/}.
+The figure\ \ref{fig:eda-process-model} shows a rough outline of the austrian permission process~\cite{ebutilities}.
+
+The user initiates the permission process with the intent to share the data with the eligible party.
+The eligible party receives data from the user, such as metering point and the name of the users' distribution system operator (DSO).
+This allows the eligible party to create a consent management request for energy data or permission request as called in EDDIE as shown in the figure\ \ref{fig:eda-permission-request}.
+This permission request is sent to the permission administrator, EDA in Austria, which in turn validates the permission request according to their constraints.
+After some specific validations are done, EDA will send an acknowledgment to the eligible party.
+EDA further validates the permission request — for example, the start date should be before the end date.
+After validation, EDA sends a rejected message in case of validation errors.
+Otherwise, the permission request is forwarded to the end user.
+The end user can either accept, reject or ignore the permission request.
+In the first case, the eligible party will get an accepted message from EDA, for the latter two the permission administrator will send a rejected message~\cite{eda, ebutilities}.
+
+The permission request for austria itself as seen in the figure\ \ref{fig:eda-permission-request} contains a CM Request ID, which the eligible party generates using the eligible party ID and the current timestamp.
+The eligible party ID is created by EDA for the eligible party.
+Furthermore, the metering point ID or the DSO ID is needed, but one of them can be omitted.
+If only the metering point is supplied, the DSO ID can be extracted from the metering point as it contains the DSO ID.
+If only the DSO ID is given, the end user has to get the identification for the permission request from the eligible party to accept it in their web portal.
+Last, a from and to date is needed; this is the timeframe in which the energy data is requested~\cite{ebutilities}.
+
+
+
+\begin{figure}[h]
+    \includegraphics[width=\columnwidth]{./assets/eda/cm-process}
+    \caption{EDA Process Model}
+    \label{fig:eda-process-model}
+\end{figure}
+
+\begin{figure}[h]
+    \includegraphics[scale=0.3]{./assets/eda/cm-request}
+    \caption{EDA Permission Request(CM Request)}
+    \label{fig:eda-permission-request}
+\end{figure}
+
+\subsection{France: Enedis}\label{subsec:france:-enedis}
+France has multiple permission administrators for energy data, one of them is ENEDIS.
+
+
+\subsection{Spain: Datadis}\label{subsec:spain:-datadis}
+
+\subsection{Comparison of Permission Administrators}\label{subsec:comparison-of-permission-administrators}
