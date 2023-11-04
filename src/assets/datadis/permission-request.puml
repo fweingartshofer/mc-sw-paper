@@ -1,0 +1,11 @@
+@startuml
+'https://plantuml.com/class-diagram
+hide methods
+class PermissionRequest {
+  NIF: String
+  CUPs: List<String>
+  from: Date
+  to: Date
+}
+
+@enduml

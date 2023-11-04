@@ -1,0 +1,35 @@
+@startuml
+|End User|
+start
+:Initialize Permission Process;
+-> send NIF, CUPS and\nTimeframe;
+|Eligible Party|
+:Receive Data;
+:Create a Permission Request with NIF, CUPS, and requested timeframe;
+:Make HTTP REST call to authorization API;
+-> Permission Request;
+|Datadis|
+:Receive Permission Request;
+:Send Permission Request to End User Portal;
+|End User|
+:Receive Permission Request in portal;
+if (Accept?) then (Yes)
+else (No)
+endif
+:Notify Datadis;
+|Datadis|
+:Receive Answer;
+:Authorize/Reject Eligible Party;
+stop
+|Eligible Party|
+while (Timeout) is (not reached)
+  :Regularly request end user data from the API;
+  if (Result is positive) then (Yes)
+    :Permission request was accepted;
+    break;
+  else (No)
+    :Do nothing;
+  endif
+endwhile
+stop
+@enduml

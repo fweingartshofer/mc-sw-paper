@@ -75,7 +75,7 @@ Subsequently, the authorization server verifies the user and offers them the opt
 In the event of rejection, the authorized party remains uninformed about the refusal.
 However, if the request is accepted, the end user is redirected to the specified redirection URI, equipped with an authorization code.
 The authorized party hosts this redirection URI and uses the authorization code to get an access token from the authorization server.
-This access token, in turn, grants access to the end user's energy data.
+This access token, in turn, grants access to the end user's energy data\cite{enedis-dev-guide,rfc6749-oauth}.
 
 Since the permission request is mostly done without the eligible partys knowledge, the permission request itself only needs a timeframe in which the eligible party wants to request data.
 
@@ -86,6 +86,44 @@ Since the permission request is mostly done without the eligible partys knowledg
 \end{figure}
 
 \subsection{Spain: Datadis}\label{subsec:spain:-datadis}
+Datadis is the permission administrator of Spain.
+They also use a pull-based approach to access energy data of an end user.
+The permission process is based on HTTP calls, but they do not implement OAuth 2.0~\cite{datadis-dev-guide}.
+
+Datadis' approach to the permission request utilizes JWT as access tokens.
+For eligible party to be able to access end user data, they first have to get a token for themselves.
+This is done by first registering with Datadis and obtaining a NIF.
+A NIF is an identifier for an entity in Datadis' system.
+A person's passport number can be their NIF or for a company their registration number.
+Once they are registered, they have to obtain the token via an HTTP REST call to an authorization API.
+The next step is to create a permission request for a specific end user.
+This is done by getting the NIF of the end user, their CUPS, which are the end users metering points, and the requested timeframe, which is essentially a start and end date.
+Some of the abbreviations used by Datadis are not documented, such as CUP and NIF.
+Once the request is posted to datadis' endpoint, the end user will receive the permission request in their portal and can choose to accept or decline it.
+If rejected, the eligible party will not be notified.
+If accepted, the eligible party will not be notified.
+Therefore, the only solution for the eligible party is to regularly request energy data from the API for an end user account if the result is positive, the permission request was accepted.
+This permission process can be seen in the figure\ \ref{fig:datadis-process-model} and the permission request itself in the figure\ \ref{fig:datadis-permission-request}~\cite{datadis-dev-guide, bprt-issues}.
+
+\begin{figure}[h]
+    \includegraphics[width=\columnwidth]{./assets/datadis/process-model}
+    \caption{Datadis Process Model}
+    \label{fig:datadis-process-model}
+\end{figure}
+
+\begin{figure}[h]
+    \includegraphics[scale=0.3]{./assets/datadis/permission-request}
+    \caption{Datadis Permission Request}
+    \label{fig:datadis-permission-request}
+\end{figure}
 
 \subsection{Comparison of Permission Administrators}\label{subsec:comparison-of-permission-administrators}
-In this subsection the different approaches between 
+In this subsection the different approaches between EDA, ENEDIS and Datadis are compared.
+
+EDA implements the approach that is most different to the others.
+Their process model requires more steps than the others, as can be seen in the figure\ \ref{fig:eda-process-model}.
+EDA also utilizes a different protocol than ENEDIS or Datadis.
+While these two use HTTP as the basis, with ENEDIS implementing a standardized OAuth 2.0 authorization code grant, EDAs authorization protocol is based on the AS4 protocol and the Ponton X/P Messenger.
+
+All three all have very different processes, which cannot be mapped one to one.
+How all the processes and states can be integrated into one process model can be seen in section\ \ref{sec:state-process-model-design}.
