@@ -27,6 +27,16 @@ All permission requests that are sent to EDDIE have a state in the process model
 There are many different states, so the process model can generalize all the different permission request processes that are implemented in different countries.
 The permission request is initially in the created-state as can be seen in the figure\ \ref{fig:process-model}.
 
+The process model has to fulfill multiple different use-cases at once.
+The first use case is to generalize all the different permission processes that are implemented by permission administrators.
+This means that some permission process might skip states, which are present in the state process model described here, because they are required by other permission processes.
+In this case, the states are implicitly reached, since more often than not the skipped states are included in a future state of the permission process.
+The state process model assumes that the state was reached in the past and updates the state of the permission request accordingly.
+
+The second use case is for EDDIE itself.
+Since the eligible party can manage permission requests, they have to be able to manipulate permission requests themselves.
+The process model reflects this, by introducing states for the eligible party, for example, the terminated state described in\ \ref{subsubsec:terminated-state}.
+
 \begin{figure}[h]
     \includegraphics[scale=0.3]{./assets/process-model}
     \caption{Process Model}
@@ -37,6 +47,8 @@ The permission request is initially in the created-state as can be seen in the f
 After it is created, EDDIE validates the permission request and checks for errors in the request.
 One such error can be that the start date is after the end date.
 If the request cannot be validated successfully, it will be moved to the malformed state.
+The validation is done only on EDDIES side, as the user input data has to be checked and sanitized.
+Such checks include validation of timeframes, the start date should be before the end date.
 
 \subsubsection{Malformed State}
 This state indicates that EDDIE cannot send the permission request to the permission administrator and is a final state.
@@ -103,6 +115,6 @@ This is a final state, and the eligible party can no longer access the end users
 The end user revoked the permission early, removing access to their data to the eligible party.
 This is a final state, and the eligible party can no longer access the end users data.
 
-\subsubsection{Terminated State}
+\subsubsection{Terminated State}\label{subsubsec:terminated-state}
 The eligible party chose to terminate the permission before its time limit was reached and can no longer access the end users data.
 This is a final state.

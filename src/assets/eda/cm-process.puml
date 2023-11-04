@@ -1,44 +1,45 @@
 @startuml
 |End User|
 start
-:User initiates Permission Process;
+:1. User initiates Permission Process;
 |EDA/Permission Administrator|
 |Eligible Party|
-:Eligible Party receives data;
-:Eligible Party creates Permission Request;
-:Send Permission Request;
+:2. Eligible Party receives data;
+:3. Eligible Party creates Permission Request;
+:4. Eligible Party validates Permission Request;
+:5. Send Permission Request;
 |EDA/Permission Administrator|
-:Receive Permission Request;
+:6. Receive Permission Request;
 if (EDA Validates Request?) then (yes)
 else (no)
-  :Send Rejected Message;
+  :7. Send Rejected Message;
   |Eligible Party|
-  :Receive Rejected Message;
+  :8. Receive Rejected Message;
   stop
 endif
 split
   |EDA/Permission Administrator|
-  :Permission Request\nforwarded to End User;
+  :9. Permission Request\nforwarded to End User;
   |End User|
-  :End User responds\n(Accept, Reject, Ignore);
+  :10. End User responds\n(Accept, Reject, Ignore);
   if (Accepted?) then (yes)
     |EDA/Permission Administrator|
-    :Send Accepted Message\nto Eligible Party;
+    :11. Send Accepted Message\nto Eligible Party;
     |Eligible Party|
-    :Receive Accepted Message;
+    :12. Receive Accepted Message;
     stop
   else (no/ignored)
     |EDA/Permission Administrator|
-    :Send Rejected Message to Eligible Party;
+    :13. Send Rejected Message to Eligible Party;
     |Eligible Party|
-    :Receive Rejected Message;
+    :14. Receive Rejected Message;
     stop
   endif
 split again
   |EDA/Permission Administrator|
-  :Send Acknowledgment\nto Eligible Party;
+  :15. Send Acknowledgment\nto Eligible Party;
   |Eligible Party|
-  :Receive Acknowledgment;
+  :16. Receive Acknowledgment;
   detach
 end split
 @enduml
