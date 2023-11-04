@@ -1,0 +1,23 @@
+@startuml
+|End User|
+start
+:End User initiates OAuth2 flow;
+|OAuth Server|
+:OAuth Server processes request and validates user;
+|End User|
+if (Approves Access) then (Approves)
+else (Rejects)
+stop;
+endif
+|OAuth Server|
+:Issues an Authorization Code;
+:Redirects to redirect URI;
+
+|Eligible Party|
+:Receives Authorization Code;
+:Sends Authorization Code to Token Endpoint;
+|OAuth Server|
+:Validates the Code;
+:Issues an Access Token;
+|Eligible Party|
+@enduml

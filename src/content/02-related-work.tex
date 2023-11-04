@@ -40,8 +40,6 @@ If only the metering point is supplied, the DSO ID can be extracted from the met
 If only the DSO ID is given, the end user has to get the identification for the permission request from the eligible party to accept it in their web portal.
 Last, a from and to date is needed; this is the timeframe in which the energy data is requested~\cite{ebutilities}.
 
-
-
 \begin{figure}[h]
     \includegraphics[width=\columnwidth]{./assets/eda/cm-process}
     \caption{EDA Process Model}
@@ -56,8 +54,38 @@ Last, a from and to date is needed; this is the timeframe in which the energy da
 
 \subsection{France: Enedis}\label{subsec:france:-enedis}
 France has multiple permission administrators for energy data, one of them is ENEDIS.
+France utilizes a pull-based model, unlike Austrias' EDA, which is described in subsection\ \ref{subsec:austria:-eda}.
+A pull-based approach allows the eligible party to get the data from an interface, like a REST service.
 
+ENEDIS' permission process can be seen in the figure\ \ref{fig:enedis-process-model}.
+The process follows the OAuth 2.0 specification, specifically the OAuth 2.0 authorization code grant.
+Eligible parties have to register with ENEDIS to get access to a specific set APIs, this is called a ``scope''.
+After registering with ENEDIS, the eligible party receives access credentials, a client ID, that need to be presented each API call~\cite{rfc6749-oauth, enedis-dev-guide}.
+
+The OAuth 2.0 authorization code grant enables an end user to provide access to an authorized party.
+There are three entities:
+\begin{itemize}
+    \item{The End User} can authorize others to access their energy data.
+    \item{The Authorization Server} can verify the end user and give access to the energy data.
+    \item{The Eligible Party} that wants access to and end users' data and is registered with the authorization server.
+\end{itemize}
+The process begins with the end user initiating it.
+They are then directed to an authorization server, which receives client identification, scope, and redirection URI as parameters.
+Subsequently, the authorization server verifies the user and offers them the option to approve the permission request.
+In the event of rejection, the authorized party remains uninformed about the refusal.
+However, if the request is accepted, the end user is redirected to the specified redirection URI, equipped with an authorization code.
+The authorized party hosts this redirection URI and uses the authorization code to get an access token from the authorization server.
+This access token, in turn, grants access to the end user's energy data.
+
+Since the permission request is mostly done without the eligible partys knowledge, the permission request itself only needs a timeframe in which the eligible party wants to request data.
+
+\begin{figure}[h]
+    \includegraphics[width=\columnwidth]{./assets/enedis/process-model}
+    \caption{ENEDIS Process Model}
+    \label{fig:enedis-process-model}
+\end{figure}
 
 \subsection{Spain: Datadis}\label{subsec:spain:-datadis}
 
 \subsection{Comparison of Permission Administrators}\label{subsec:comparison-of-permission-administrators}
+In this subsection the different approaches between 
