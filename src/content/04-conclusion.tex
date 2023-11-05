@@ -5,12 +5,31 @@ Furthermore, the skipped or replaced states are explained.
 
 \subsection{Permission State Model in EDA's Permission Process}\label{subsec:permission-state-model-in-eda's-permission-process}
 EDAs permission process is the one that has the most states, since the eligible party is often notified about changes to the permission request.
-The activity diagram\ \ref{fig:eda-process-model} contains numbers that are matched with the states described in\ \ref{subsec:state-process-model}.
-So the following activities are represented by the state next to the number:
-\begin{enumerate}
-    \item Does not have a corresponding state
-    \item Same as above
-    \item Created-State
-    \item Validated-State
-    \item Pending-Permission-Administrator-Acknowledgment-State
-\end{enumerate}
+The table\ \ref{tab:eda-matched-states} shows how each activity in figure\ \ref{fig:eda-process-model} is matched to the states described in subsection\ \ref{subsec:state-process-model}.
+The numbers in the left column are the numbers present in the activities in EDAs permission process model.
+The table is sorted by the order of the states.
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|c|l|}
+        \hline
+        \textbf{Activity} & \textbf{State} \\
+        \hline
+        2 & Created-State \\
+        14 & Malformed-State \\
+        3 & Validated-State \\
+        13 & Unable-to-Send-State \\
+        4 & Pending-Permission-Administrator-Acknowledgment-State \\
+        5 & Sent-to-Permission-Administrator-State \\
+        12 & Invalid-State \\
+        10 & Rejected-State \\
+        11 & Time-Out-State \\
+        8 & Accepted-State \\
+        18 & Time-Limit-State \\
+        17 & Revoked-State \\
+        15 & Terminated-State \\
+        \hline
+    \end{tabular}
+    \caption{Permission Request States matched to EDAs Permission Process}
+    \label{tab:eda-matched-states}
+\end{table}

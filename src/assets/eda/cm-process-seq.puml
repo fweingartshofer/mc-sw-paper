@@ -1,0 +1,49 @@
+@startuml
+autonumber
+actor user as "End User"
+participant ep as "Eligible Party"
+participant eda as "EDA"
+== Permission Request Creation ==
+user -> ep++ : Start Permission Process\nSend DSO ID, MeteringPoint
+ep -> ep : Create Permission Request
+alt Valid Permission Request
+  ep -> ep : Validate Permission Request
+  loop while Permission Request not successfully transmitted
+
+    ep -> eda--++ : Send Permission Request
+    alt Valid Permission Request
+      eda --> ep : Send Acknowledgment
+      eda --> user : Forward Permission Request
+      alt Accept
+        user -> eda : Send Accept Message
+        eda --> ep : Send Accept Message
+      else Reject
+        user -> eda : Send Rejection Message
+        eda --> ep : Send Rejection Message
+      else Ignore
+        eda --> ep : Send Rejection Message
+      end
+    else Invalid Permission Request
+      eda --> ep-- : Send Rejection Message
+    else Transmission Failure
+      ep --> ep : Unable to transmit Permission Request
+    end
+
+  end
+else Invalid Permission Request
+  ep -> ep : Invalidate Permission Request
+end
+
+== Permission Granted — Termination By Eligible Party ==
+ep -> eda : Send Termination Message
+
+== Permission Granted — Revocation By End User ==
+user -> eda++  : Send Revocation Message
+eda -> ep-- : Send Revocation Message
+
+== Permission Granted — Time Limit ==
+ep --> ep : Time Limit reached
+eda --> eda : Time Limit reached
+
+
+@enduml

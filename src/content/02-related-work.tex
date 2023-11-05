@@ -19,7 +19,7 @@ First, if a permission request for energy data is accepted, EDA will send the en
 This is done via the AS4 protocol\cite{eda}.
 
 The permission process or the consent process, as it is called in Austria, is based on XML documents that are sent to EDA.
-These documents and the process itself are documented at\ \href{https://www.ebutilities.at/}{https://www.ebutilities.at/}.
+These documents and the process itself are documented at\ \href{https://www.ebutilities.at/}{ebutilities.at}.
 The figure\ \ref{fig:eda-process-model} shows a rough outline of the austrian permission process~\cite{ebutilities}.
 
 The user initiates the permission process with the intent to share the data with the eligible party.
@@ -31,7 +31,8 @@ EDA further validates the permission request — for example, the start date sho
 After validation, EDA sends a rejected message in case of validation errors.
 Otherwise, the permission request is forwarded to the end user.
 The end user can either accept, reject or ignore the permission request.
-In the first case, the eligible party will get an accepted message from EDA, for the latter two the permission administrator will send a rejected message~\cite{eda, ebutilities}.
+In the first case, the eligible party will get an accepted message from EDA, for the latter two the permission administrator will send a rejected message.
+The last three sections of the sequence diagram show how a permission will end, with either the permission reaching its natural end, the user revoking the permission or the eligible party terminating the permission~\cite{eda, ebutilities}.
 
 The permission request for austria itself as seen in the figure\ \ref{fig:eda-permission-request} contains a CM Request ID, which the eligible party generates using the eligible party ID and the current timestamp.
 The eligible party ID is created by EDA for the eligible party.
@@ -41,7 +42,7 @@ If only the DSO ID is given, the end user has to get the identification for the 
 Last, a from and to date is needed; this is the timeframe in which the energy data is requested~\cite{ebutilities}.
 
 \begin{figure}[h]
-    \includegraphics[width=\columnwidth]{./assets/eda/cm-process}
+    \includegraphics[width=\columnwidth]{./assets/eda/cm-process-seq}
     \caption{EDA Process Model}
     \label{fig:eda-process-model}
 \end{figure}
