@@ -1,0 +1,25 @@
+@startuml
+autonumber
+actor user as "End User"
+participant oauth as "OAuth Server"
+participant ep as "Eligible Party"
+
+user -> oauth : Initiates Permission Process
+oauth -> oauth : Validates Request
+oauth -> user : Send Permission Request
+user -> user : Accepts/Rejects/Ignores Permission Request
+alt End User Accepts Permission Request
+user -> oauth : Send Accept
+oauth -> oauth : Issue Authorization Code
+oauth -> user : Redirect to Redirection URI with Authorization Code
+user -> ep : Visit Redirect URI
+ep -> ep : Get Authorization Code from Redirect URI
+ep -> oauth : Send Authorization Code
+oauth -> oauth : Validates Authorization Code
+oauth -> ep : Issues Access Token
+else End User Rejects Permission Request
+user -> oauth : Send Rejection
+else End User Ignores Permission Request
+user -> user : Ignore Permission Request
+end
+@enduml
