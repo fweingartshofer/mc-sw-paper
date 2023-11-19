@@ -5,31 +5,21 @@ Furthermore, the skipped or replaced states are explained.
 
 \subsection{Permission State Model in EDA's Permission Process}\label{subsec:permission-state-model-in-eda's-permission-process}
 EDAs permission process is the one that has the most states, since the eligible party is often notified about changes to the permission request.
-The table\ \ref{tab:eda-matched-states} shows how each activity in figure\ \ref{fig:eda-process-model} is matched to the states described in subsection\ \ref{subsec:state-process-model}.
-The numbers in the left column are the numbers present in the activities in EDAs permission process model.
-The table is sorted by the order of the states.
+The states that EDAs permission process has, match up with the permission process model without problems.
+Each state has a counterpart in the state process model described in the section\ \ref{sec:state-process-model-design}.
 
-\begin{table}[h]
-    \centering
-    \begin{tabular}{|c|l|}
-        \hline
-        \textbf{Activity} & \textbf{State} \\
-        \hline
-        2 & Created-State \\
-        14 & Malformed-State \\
-        3 & Validated-State \\
-        13 & Unable-to-Send-State \\
-        4 & Pending-Permission-Administrator-Acknowledgment-State \\
-        5 & Sent-to-Permission-Administrator-State \\
-        12 & Invalid-State \\
-        10 & Rejected-State \\
-        11 & Time-Out-State \\
-        8 & Accepted-State \\
-        18 & Time-Limit-State \\
-        17 & Revoked-State \\
-        15 & Terminated-State \\
-        \hline
-    \end{tabular}
-    \caption{Permission Request States matched to EDAs Permission Process}
-    \label{tab:eda-matched-states}
-\end{table}
+\subsection{Permission State Model in ENEDIS' Permission Process}\label{subsec:permission-state-model-in-enedis'-permission-process}
+Enedis' permission process does not fit completely the state process model as it does not notify the eligible party about every state change.
+This can be fixed by sending the permission request first to the eligible party, which can validate it according to its terms and then send the permission request with the OAuth request to the OAuth server.
+That way it is possible to give the eligible party more control over the permission requests.
+This will prevent users and eligible parties from creating and accepting permission requests that are not fit for the eligible partys services.
+
+One state that cannot be reached in ENEDIS' permission process for the state process model is the invalid state, since the eligible party is never notified about validation errors.
+
+
+\subsection{Permission State Model in Datadis' Permission Process}\label{subsec:permission-state-model-in-datadis'-permission-process}
+Datadis' permission process is the shortest of all the evaluated permission processes in the section\ \ref{sec:related-work}.
+It matches the least number of states and does not allow for much eligible party interaction.
+The eligible party is never even notified by Datadis that a permission request has been accepted.
+A workaround to still get this information is to let the user notify the eligible party by letting them click a button.
+

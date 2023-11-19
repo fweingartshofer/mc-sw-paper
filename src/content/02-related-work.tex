@@ -96,7 +96,7 @@ Datadis is the permission administrator of Spain.
 They also use a pull-based approach to access energy data of an end user.
 The permission process is based on HTTP calls, but they do not implement OAuth 2.0~\cite{datadis-dev-guide}.
 
-Datadis' approach to the permission request utilizes JWT as access tokens.
+Datadis' approach to the permission request process utilizes JSON web tokens as API tokens.
 For eligible party to be able to access end user data, they first have to get a token for themselves.
 This is done by first registering with Datadis and obtaining a NIF.
 A NIF is an identifier for an entity in Datadis' system.
@@ -108,7 +108,8 @@ Some of the abbreviations used by Datadis are not documented, such as CUP and NI
 Once the request is posted to datadis' endpoint, the end user will receive the permission request in their portal and can choose to accept or decline it.
 If rejected, the eligible party will not be notified.
 If accepted, the eligible party will not be notified.
-Therefore, the only solution for the eligible party is to regularly request energy data from the API for an end user account if the result is positive, the permission request was accepted.
+Therefore, the only solution for the eligible party is to rely on user input, the end user has to notify the eligible party themselves that they have accepted the permission request.
+The user has to click another set of buttons to notify the eligible party.
 This permission process can be seen in the figure\ \ref{fig:datadis-process-model} and the permission request itself in the figure\ \ref{fig:datadis-permission-request}~\cite{datadis-dev-guide, bprt-issues}.
 
 The process if the user decides to revoke a permission, the time limit is reached or the permission is terminated by the eligible party, is equal to ENEDIS' process, as described in subsection\ \ref{subsec:france:-enedis}

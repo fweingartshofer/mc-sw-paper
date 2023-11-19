@@ -8,22 +8,15 @@ participant dso as "Datadis"
 user -> ep++ : Initialize Process\nwith NIF, CUPS and Timeframe
 ep -> ep : Create Permission Request
 ep -> ep : Validate Permission Request
+loop Wait until Endpoint Available
+  ep -> dso : Check Endpoint Availability
+end
 ep --> dso++ : Send Permission Request
 ep --> user : Redirect to Datadis Portal
 user -> dso : Get Permission Request
-dso --> user-- : Return Permission Request
+dso --> user : Return Permission Request
 
-loop While Datadis API is not authorized
-  ep -> dso: Request Data
-  alt Is Authorized
-    dso --> ep : Return Data
-    ep -> ep : Permission Request Accepted
-  else Is Not Authorized
-    dso --> ep : Return not authorized
-    alt Is Timeout reached
-      ep -> ep : Permission Request Time Out
-    end
-  end
-end
+user -> dso : Accept or Reject
+user -> ep : Accept or Reject
 
 @enduml
