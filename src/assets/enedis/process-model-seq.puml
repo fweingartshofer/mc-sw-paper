@@ -3,23 +3,50 @@ autonumber
 actor user as "End User"
 participant oauth as "OAuth Server"
 participant ep as "Eligible Party"
-
-user -> oauth : Initiates Permission Process
-oauth -> oauth : Validates Request
-oauth -> user : Send Permission Request
-user -> user : Accepts/Rejects/Ignores Permission Request
-alt End User Accepts Permission Request
-user -> oauth : Send Accept
-oauth -> oauth : Issue Authorization Code
-oauth -> user : Redirect to Redirection URI with Authorization Code
-user -> ep : Visit Redirect URI
-ep -> ep : Get Authorization Code from Redirect URI
-ep -> oauth : Send Authorization Code
-oauth -> oauth : Validates Authorization Code
-oauth -> ep : Issues Access Token
-else End User Rejects Permission Request
-user -> oauth : Send Rejection
-else End User Ignores Permission Request
-user -> user : Ignore Permission Request
+activate user
+user -> ep : Initiates Permission Process\nSend Start/End Date of Permission Request
+ep -> ep : Creates Permission Request
+alt Permission Request Valid
+  ep -> ep : Validates Permission Request
+  loop Wait until Token Endpoint Available
+    ep -> oauth : Check Token Enpoint Availability
+  end
+  ep -> user : Send URI to OAuth Endpoint
+  user -> oauth : Visits OAuth Endpoint
+  alt Permission Request Valid
+      oauth -> oauth : Validates Request
+      oauth -> user : Send Permission Request
+      user -> user : Accepts/Rejects/Ignores Permission Request
+      alt End User Accepts Permission Request
+        user -> oauth : Send Accept
+        oauth -> oauth : Issue Authorization Code
+        oauth -> user : Redirect to Redirection URI with Authorization Code
+        user -> ep : Visit Redirect URI
+        ep -> ep : Get Authorization Code from Redirect URI
+        ep -> oauth : Send Authorization Code
+        oauth -> oauth : Validates Authorization Code
+        oauth -> ep : Issues Access Token
+      else End User Rejects Permission Request
+        user -> oauth : Send Rejection
+      else End User Ignores Permission Request
+        user -> user : Ignore Permission Request
+      end
+  else Permission Request Invalid
+    oauth -> user : Send Errors
+  end
+else Permission Request Invalid
+  ep -> ep : Invalidate Permission Request
+  ep -> user : Send Error Message
 end
+deactivate user
+
+== Permission Granted — Termination By Eligible Party ==
+ep -> ep : Terminated Permission
+
+== Permission Granted — Revocation By End User ==
+user -> oauth : Send Revocation Message
+
+== Permission Granted — Time Limit ==
+oauth --> oauth : Time Limit reached
+ep --> ep : Time Limit reached
 @enduml

@@ -71,17 +71,22 @@ There are three entities:
     \item{The Eligible Party} that wants access to and end users' data and is registered with the authorization server.
 \end{itemize}
 The process begins with the end user initiating it.
-They are then directed to an authorization server, which receives client identification, scope, and redirection URI as parameters.
+Steps 2 to 5 in the figure\ \ref{fig:enedis-process-model} are not required by OAauth 2.0, but are introduced to give the eligible party more control over the permission request.
+Here the eligible party has the chance to create, validate the permission request on their end and check for the token endpoint availability of the authorization server.
+The end user is then directed to an authorization server, which receives client identification, scope, and redirection URI as parameters.
 Subsequently, the authorization server verifies the user and offers them the option to approve the permission request.
 In the event of rejection, the authorized party remains uninformed about the refusal.
 However, if the request is accepted, the end user is redirected to the specified redirection URI, equipped with an authorization code.
 The authorized party hosts this redirection URI and uses the authorization code to get an access token from the authorization server.
-This access token, in turn, grants access to the end user's energy data\cite{enedis-dev-guide,rfc6749-oauth}.
+This access token, in turn, grants access to the end user's energy data.
+If the eligible party wants to terminate a permission request after the permission has been granted, they have to stop using the access tokens, as ENEDIS itself does not offer a way to invalidate credentials.
+If the end user decides to revoke permission, the eligible party will only know about this when an API call fails, because the permission has been revoked.
+The time limit is saved by the eligible party, so they know when it is reached~\cite{enedis-dev-guide,rfc6749-oauth}.
 
 Since the permission request is mostly done without the eligible partys knowledge, the permission request itself only needs a timeframe in which the eligible party wants to request data.
 
 \begin{figure}[h]
-    \includegraphics[width=\columnwidth]{./assets/enedis/process-model}
+    \includegraphics[width=\columnwidth]{./assets/enedis/process-model-seq}
     \caption{ENEDIS Process Model}
     \label{fig:enedis-process-model}
 \end{figure}
@@ -106,8 +111,10 @@ If accepted, the eligible party will not be notified.
 Therefore, the only solution for the eligible party is to regularly request energy data from the API for an end user account if the result is positive, the permission request was accepted.
 This permission process can be seen in the figure\ \ref{fig:datadis-process-model} and the permission request itself in the figure\ \ref{fig:datadis-permission-request}~\cite{datadis-dev-guide, bprt-issues}.
 
+The process if the user decides to revoke a permission, the time limit is reached or the permission is terminated by the eligible party, is equal to ENEDIS' process, as described in subsection\ \ref{subsec:france:-enedis}
+
 \begin{figure}[h]
-    \includegraphics[width=\columnwidth]{./assets/datadis/process-model}
+    \includegraphics[width=\columnwidth]{./assets/datadis/process-model-seq}
     \caption{Datadis Process Model}
     \label{fig:datadis-process-model}
 \end{figure}
