@@ -1,45 +1,51 @@
 \section{Related Work}\label{sec:related-work}
-This section will examine the current state of the permission request process of three different permission administrators:
+This section will offer an examination of the current state of the permission request process among three different permission administrators:
 \begin{itemize}
-    \item{}Austria's EDA
-    \item{}France's Enedis
+    \item{}The Energy Data Exchange (EDA) in Austria
+    \item{}France's ENEDIS
     \item{}Spain's Datadis
 \end{itemize}
 
-The process model described in the subsection\ \ref{subsec:state-process-model} is built using the process models described here as reference.
+The process model, described in subsection\ \ref{subsec:state-process-model}, is derived from the permission process discussed here.
 
 \subsection{Austria: EDA}\label{subsec:austria:-eda}
-The Energy Data Exchange (EDA) is the project and company in austria that manages the permissions to energy consumption, production and master data.
-While the first two datatypes are straight forward, master data is data about account details of a metering point.
-EDA is owned by all the austrian grid operators.
-Unlike the other permission administrators on this list, EDA does not use a pull-based model, but a pushed based approach~\cite{eda}.
+The Energy Data Exchange (EDA) refers to the project and company in Austria managing permission requests for energy consumption,
+production, and master data.
+While the first two data types are self-explanatory, ``master data'' refers to account details for a metering point.
+EDA is owned by all Austrian grid operators.
+Distinctively, unlike other permission administrators, EDA employs a push-based model rather than a pull-based one~\cite{eda}.
 
-A push-based approach for energy consumption and production data has several consequences.
-First, if a permission request for energy data is accepted, EDA will send the energy data to the eligible party.
-This is done via the AS4 protocol\cite{eda}.
+This push-based approach to energy consumption and production data implies several consequences.
+Primarily, if a permission request for energy data is approved,
+EDA will forward the energy data to the approved party via the AS4 protocol\cite{eda}.
+The permission process, referred to as ``consent process'' in Austria, utilizes XML documents to communicate with EDA.
+The protocol and documents behind this process are outlined at\ \href{https://www.ebutilities.at/}{ebutilities.at}.
+Figure\ \ref{fig:eda-process-model} provides a general outline of the Austrian permission process~\cite{ebutilities}.
 
-The permission process or the consent process, as it is called in Austria, is based on XML documents that are sent to EDA.
-These documents and the process itself are documented at\ \href{https://www.ebutilities.at/}{ebutilities.at}.
-The figure\ \ref{fig:eda-process-model} shows a rough outline of the austrian permission process~\cite{ebutilities}.
+The permission process starts when a user expresses intent to share data with an eligible party.
+This party receives data from the user, like metering point and the user's Distribution System Operator's (DSO) name.
+This information enables the eligible party to initiate a consent management request for energy data,
+or permission request as referred to in EDDIE, as demonstrated in Figure\ \ref{fig:eda-permission-request}.
+The administrator, in Austria, EDA, then receives this permission request and validates it based on predefined parameters.
+Upon successful validation, EDA sends an acknowledgment to the corresponding party.
+Further validations ensure the structure and content validity of the request — for instance,
+checking whether the start date precedes the end date.
+In case of validation failure, EDA sends a rejection message.
+Otherwise, the request is relayed to the end user.
+The end user has the right to either accept, reject, or ignore the request.
+EDA sends an acceptance message to the eligible party in the case of approval and a rejection message for the latter two.
+The concluding sections of the sequence diagram illustrate how a permission expires,
+with either the permission reaching its natural expiry,
+the user revoking the permission, or the eligible party terminating the permission~\cite{eda,ebutilities}.
 
-The user initiates the permission process with the intent to share the data with the eligible party.
-The eligible party receives data from the user, such as metering point and the name of the users' distribution system operator (DSO).
-This allows the eligible party to create a consent management request for energy data or permission request as called in EDDIE as shown in the figure\ \ref{fig:eda-permission-request}.
-This permission request is sent to the permission administrator, EDA in Austria, which in turn validates the permission request according to their constraints.
-After some specific validations are done, EDA will send an acknowledgment to the eligible party.
-EDA further validates the permission request — for example, the start date should be before the end date.
-After validation, EDA sends a rejected message in case of validation errors.
-Otherwise, the permission request is forwarded to the end user.
-The end user can either accept, reject or ignore the permission request.
-In the first case, the eligible party will get an accepted message from EDA, for the latter two the permission administrator will send a rejected message.
-The last three sections of the sequence diagram show how a permission will end, with either the permission reaching its natural end, the user revoking the permission or the eligible party terminating the permission~\cite{eda, ebutilities}.
-
-The permission request for austria itself as seen in the figure\ \ref{fig:eda-permission-request} contains a CM Request ID, which the eligible party generates using the eligible party ID and the current timestamp.
-The eligible party ID is created by EDA for the eligible party.
-Furthermore, the metering point ID or the DSO ID is needed, but one of them can be omitted.
-If only the metering point is supplied, the DSO ID can be extracted from the metering point as it contains the DSO ID.
-If only the DSO ID is given, the end user has to get the identification for the permission request from the eligible party to accept it in their web portal.
-Last, a from and to date is needed; this is the timeframe in which the energy data is requested~\cite{ebutilities}.
+As demonstrated in Figure\ \ref{fig:eda-permission-request}, the Austrian permission request contains a CM Request ID,
+which the eligible party generates with their own ID and the current timestamp.
+EDA creates the eligible party ID for the said party.
+Additionally, the metering point ID or the DSO ID is needed, although it is possible to omit one of them.
+If only the metering point is provided, the DSO ID can be inferred, as it is part of the metering point.
+Exclusively providing the DSO ID requires the end user
+to find the permission request from the eligible party by its CM Request ID to approve it in their web portal.
+Lastly, a start and end date specify the timeframe for the energy data request~\cite{ebutilities}.
 
 \begin{figure}[h]
     \includegraphics[width=\columnwidth]{./assets/eda/cm-process-seq}
@@ -53,37 +59,45 @@ Last, a from and to date is needed; this is the timeframe in which the energy da
     \label{fig:eda-permission-request}
 \end{figure}
 
-\subsection{France: Enedis}\label{subsec:france:-enedis}
-France has multiple permission administrators for energy data, one of them is ENEDIS.
-France utilizes a pull-based model, unlike Austrias' EDA, which is described in subsection\ \ref{subsec:austria:-eda}.
-A pull-based approach allows the eligible party to get the data from an interface, like a REST service.
+\subsection{France: ENEDIS}\label{subsec:france:-enedis}
+France fields multiple permission administrators for energy data, one of them being ENEDIS.
+Unlike Austria's EDA, France utilizes a pull-based model, as detailed in subsection\ \ref{subsec:austria:-eda}.
+ENEDIS employs a pull-based approach that allows the eligible party to retrieve data from an interface,
+such as a REST service.
 
-ENEDIS' permission process can be seen in the figure\ \ref{fig:enedis-process-model}.
-The process follows the OAuth 2.0 specification, specifically the OAuth 2.0 authorization code grant.
-Eligible parties have to register with ENEDIS to get access to a specific set APIs, this is called a ``scope''.
-After registering with ENEDIS, the eligible party receives access credentials, a client ID, that need to be presented each API call~\cite{rfc6749-oauth, enedis-dev-guide}.
+Figure\ \ref{fig:enedis-process-model} shows ENEDIS' permission process,
+which adheres to the OAuth 2.0 specification, specifically the authorization code grant scheme.
+Eligible parties must first register with ENEDIS to gain access to a specific set of APIs, termed as a ``scope''.
+Post-registration (with ENEDIS), the eligible party receives access credentials - a client ID -
+that need to be included in each API call~\cite{rfc6749-oauth, enedis-dev-guide}.
 
-The OAuth 2.0 authorization code grant enables an end user to provide access to an authorized party.
-There are three entities:
+The OAuth 2.0 authorization code grant enables an end user to provide access to a validated party.
+This process involves three entities:
 \begin{itemize}
-    \item{The End User} can authorize others to access their energy data.
-    \item{The Authorization Server} can verify the end user and give access to the energy data.
-    \item{The Eligible Party} that wants access to and end users' data and is registered with the authorization server.
+    \item{The End User}, having the ability to authorize third-party access to their data.
+    \item{The Authorization Server}, capable of verifying the end user and providing access to the required data.
+    \item{The Eligible Party}, registered with the authorization server, seeking access to the end user's data.
 \end{itemize}
-The process begins with the end user initiating it.
-Steps 2 to 5 in the figure\ \ref{fig:enedis-process-model} are not required by OAauth 2.0, but are introduced to give the eligible party more control over the permission request.
-Here the eligible party has the chance to create, validate the permission request on their end and check for the token endpoint availability of the authorization server.
-The end user is then directed to an authorization server, which receives client identification, scope, and redirection URI as parameters.
-Subsequently, the authorization server verifies the user and offers them the option to approve the permission request.
-In the event of rejection, the authorized party remains uninformed about the refusal.
-However, if the request is accepted, the end user is redirected to the specified redirection URI, equipped with an authorization code.
-The authorized party hosts this redirection URI and uses the authorization code to get an access token from the authorization server.
-This access token, in turn, grants access to the end user's energy data.
-If the eligible party wants to terminate a permission request after the permission has been granted, they have to stop using the access tokens, as ENEDIS itself does not offer a way to invalidate credentials.
-If the end user decides to revoke permission, the eligible party will only know about this when an API call fails, because the permission has been revoked.
-The time limit is saved by the eligible party, so they know when it is reached~\cite{enedis-dev-guide,rfc6749-oauth}.
 
-Since the permission request is mostly done without the eligible partys knowledge, the permission request itself only needs a timeframe in which the eligible party wants to request data.
+The process starts with the end user initiating the consent.
+Steps 2 to 5, detailed in Figure\ \ref{fig:enedis-process-model}, while not mandated by OAuth 2.0,
+provide the eligible party a greater control over the permission request, an opportunity to validate the request,
+and verify the token endpoint availability of the authorization server.
+The end user is directed to the authorization server,
+receiving client identification, scope, and redirection URI parameters.
+Following this, the authorization server verifies the user and prompts the user to approve the permission request.
+A rejection remains unnoticed by the approved party.
+On approval, the end user is redirected to a specified URI, bearing an authorization code.
+Hosting this URI, the authorized party uses the authorization code to obtain an access token from the same server.
+This token, in turn, permits access to the requested user's energy data.
+If an eligible party wishes to terminate a granted permission request,
+they need to cease the use of access tokens, given that ENEDIS does not offer a credential invalidation mechanism.
+The eligible party becomes aware of any potential permission revocation by the end user
+only if API calls fail due to a change in permissions.
+The time constraint is maintained by the eligible party, indicating an expiry~\cite{enedis-dev-guide,rfc6749-oauth}.
+
+As the permission request largely takes part without the knowledge of the eligible party,
+the only requisite for the permission request is a specified timeframe for requested data access.
 
 \begin{figure}[h]
     \includegraphics[width=\columnwidth]{./assets/enedis/process-model-seq}
@@ -92,27 +106,29 @@ Since the permission request is mostly done without the eligible partys knowledg
 \end{figure}
 
 \subsection{Spain: Datadis}\label{subsec:spain:-datadis}
-Datadis is the permission administrator of Spain.
-They also use a pull-based approach to access energy data of an end user.
-The permission process is based on HTTP calls, but they do not implement OAuth 2.0~\cite{datadis-dev-guide}.
+Datadis serves as Spain's permission administrator.
+Similar to France's ENEDIS, they use a pull-based approach to access energy data of an end user.
+However, they do not implement OAuth 2.0~\cite{datadis-dev-guide}.
 
-Datadis' approach to the permission request process utilizes JSON web tokens as API tokens.
-For eligible party to be able to access end user data, they first have to get a token for themselves.
-This is done by first registering with Datadis and obtaining a NIF.
-A NIF is an identifier for an entity in Datadis' system.
-A person's passport number can be their NIF or for a company their registration number.
-Once they are registered, they have to obtain the token via an HTTP REST call to an authorization API.
-The next step is to create a permission request for a specific end user.
-This is done by getting the NIF of the end user, their CUPS, which are the end users metering points, and the requested timeframe, which is essentially a start and end date.
-Some of the abbreviations used by Datadis are not documented, such as CUP and NIF.
-Once the request is posted to datadis' endpoint, the end user will receive the permission request in their portal and can choose to accept or decline it.
-If rejected, the eligible party will not be notified.
-If accepted, the eligible party will not be notified.
-Therefore, the only solution for the eligible party is to rely on user input, the end user has to notify the eligible party themselves that they have accepted the permission request.
-The user has to click another set of buttons to notify the eligible party.
-This permission process can be seen in the figure\ \ref{fig:datadis-process-model} and the permission request itself in the figure\ \ref{fig:datadis-permission-request}~\cite{datadis-dev-guide, bprt-issues}.
+Datadis' approach to the permission request process is primarily based on JSON web tokens as API tokens.
+For the eligible party to access the end user data, they first have to acquire a token for themselves.
+This process begins with the eligible party registering with Datadis and obtaining an identifier or NIF.
+Once registered, they must obtain the token via an HTTP REST call to an authorization API.
+The subsequent step involves creating a permission request for a specific end user.
+The NIF of the end user, their metering points (identified by CUPs),
+and the desired timeframe, i.e., start and end dates, form the basis of this request.
+Some of the abbreviations utilized by Datadis, such as CUP and NIF, lack clear documentation.
+Once posted to Datadis' endpoint, the end user receives the permission request in their portal,
+leaving them the choice to accept or decline.
+In case a rejection, the eligible party is not notified;
+acceptance prompts the user to take further action to inform the eligible party.
+This process, as well as the permission request,
+can be seen in Figure~\ref{fig:datadis-process-model} and Figure~\ref{fig:datadis-permission-request} respectively~\cite{datadis-dev-guide,bprt-issues}.
 
-The process if the user decides to revoke a permission, the time limit is reached or the permission is terminated by the eligible party, is equal to ENEDIS' process, as described in subsection\ \ref{subsec:france:-enedis}
+When the end user decides to revoke the permission,
+when the time limit is reached, or when the permission is terminated by the eligible party,
+the process is akin to that of ENEDIS,
+as described in subsection~\ref{subsec:france:-enedis}.
 
 \begin{figure}[h]
     \includegraphics[width=\columnwidth]{./assets/datadis/process-model-seq}
@@ -121,18 +137,21 @@ The process if the user decides to revoke a permission, the time limit is reache
 \end{figure}
 
 \begin{figure}[h]
-    \includegraphics[scale=0.3]{./assets/datadis/permission-request}
+    \centering \includegraphics[scale=0.3]{./assets/datadis/permission-request}
     \caption{Datadis Permission Request}
     \label{fig:datadis-permission-request}
 \end{figure}
 
 \subsection{Comparison of Permission Administrators}\label{subsec:comparison-of-permission-administrators}
-In this subsection the different approaches between EDA, ENEDIS and Datadis are compared.
+This subsection aims to present a comparison among the approaches implemented by EDA, ENEDIS, and Datadis.
+EDA's approach is significantly distinct from the rest.
+Highlighting differences, the process model necessitates more steps than others,
+outlined in Figure\ \ref{fig:eda-process-model}.
+Further, EDA uses a different protocol compared to ENEDIS or Datadis.
+While both ENEDIS and Datadis base their operations on HTTP,
+with ENEDIS implementing a standardized OAuth 2.0 authorization code grant,
+EDA's authorization protocol is based on the more particular AS4 protocol and the Ponton X/P Messenger.
 
-EDA implements the approach that is most different to the others.
-Their process model requires more steps than the others, as can be seen in the figure\ \ref{fig:eda-process-model}.
-EDA also utilizes a different protocol than ENEDIS or Datadis.
-While these two use HTTP as the basis, with ENEDIS implementing a standardized OAuth 2.0 authorization code grant, EDAs authorization protocol is based on the AS4 protocol and the Ponton X/P Messenger.
-
-All three all have very different processes, which cannot be mapped one to one.
-How all the processes and states can be integrated into one process model can be seen in section\ \ref{sec:state-process-model-design}.
+Despite sharing the common goal,
+the three entities possess very distinctive processes which do not directly map onto each other.
+The integration of all processes and states into a single process model is demonstrated in section\ \ref{sec:state-process-model-design}.

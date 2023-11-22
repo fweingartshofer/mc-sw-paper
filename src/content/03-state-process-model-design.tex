@@ -1,19 +1,22 @@
 \section{State Process Model Design}\label{sec:state-process-model-design}
-This section describes the state process model and its most important data structures for the permission request process in EDDIE\@.
-The state process model should be able to model in an abstract way the permission process for getting access to energy related data in different countries.
+This section describes the state process model, with emphasis on its critical data structures, used in EDDIE's permission request process.
+This model aims to encapsulate the permission process for accessing energy-related data across different countries in an abstract, yet comprehensive manner.
 
 \subsection{Permission Request}\label{subsec:permission-request}
-The permission request differs between the countries, but there are a few attributes that each country should have in common or are needed by EDDIE in all cases.
-Those attributes are shown in the figure\ \ref{fig:permission-request}.
-The most basic permission request consists of two identifiers and a timeframe for the data that should be requested.
-For example, if data from the last six months is required, the start date would be six months in the past and the end date would be the day before today.
-The \texttt{permissionId} is used by the permission request process model and EDDIE internally.
-It identifies the different states of the permission request with the same starting permission request.
-Last, the \texttt{connectionId} is an identifier given by the eligible party.
-It identifies entities in the eligible partys system with a permission request.
-For example, the \texttt{connectionId} could be an email address of a user of the eligible partys offered services.
-This identifier is optional, since not every use case requires the eligible party to know who is giving them their data.
-
+Although the detailed structure of permission requests varies across countries, they share several common attributes,
+and certain key attributes are needed by EDDIE in every case.
+Figure\ \ref{fig:permission-request} shows these attributes.
+A fundamental permission request has two identifiers and a specific timeframe for the requested data.
+For instance, if historical data from the past six months is sought, the start date would be six months prior to the current date,
+and the end date would be the day before the present day.
+The \texttt{permissionId} is utilized internally by both the permission request process model and EDDIE.
+It assists in identifying the various states of the permission request originating from identical starting requests.
+Lastly, the \texttt{connectionId} is an identifier assigned by the eligible party.
+It connects entities within the eligible party's system to a permission request and acts like a foreign key.
+As an example, the \texttt{connectionId} could represent a user's email address who uses the services provided by the eligible party.
+This identifier is optional as not every use case necessitates the eligible party to identify the data provider.
+For example, an eligible party who wishes to create general statistics of energy consumption does not need
+to identify an individual user.
 
 \begin{figure}[h]
     \includegraphics[scale=0.5]{./assets/permission-request}
@@ -22,22 +25,23 @@ This identifier is optional, since not every use case requires the eligible part
 \end{figure}
 
 \subsection{State Process Model}\label{subsec:state-process-model}
-The state process model is the part that brings everything together.
-All permission requests that are sent to EDDIE have a state in the process model.
-There are many different states, so the process model can generalize all the different permission request processes that are implemented in different countries.
-The permission request is initially in the created-state as can be seen in the figure\ \ref{fig:process-model}.
+The state process model serves as the uniting entity.
+Every permission request sent to EDDIE corresponds to a state in this model.
+Capable of accommodating various states, the model ably generalizes disparate permission processes implemented across countries.
+The permission request initially assumes the ``created-state'' as depicted in Figure\ \ref{fig:process-model}.
 
-The process model has to fulfill multiple different use-cases at once.
-The first use case is to generalize all the different permission processes that are implemented by permission administrators.
-This means that some permission process might skip states, which are present in the state process model described here, because they are required by other permission processes.
-In this case, the states are implicitly reached, since more often than not the skipped states are included in a future state of the permission process.
-The state process model assumes that the state was reached in the past and updates the state of the permission request accordingly.
+The process model is crafted to cater to multiple use cases simultaneously.
+Firstly, it is intended to generalize distinct permission processes implemented by various permission administrators.
+This implies that some processes may skip states articulated in the present state process model as they may be catered to by other permission processes.
+In this case, states are considered to implicitly be reached, as they are usually included in a later state of the permission process.
+Therefore, the state process model presumes that the state was previously reached and updates the state of the permission request accordingly.
 
-The second use case is for EDDIE itself.
-Since the eligible party can manage permission requests, they have to be able to manipulate permission requests themselves.
-The process model reflects this, by introducing states for the eligible party, for example, the terminated state described in\ \ref{subsubsec:terminated-state}.
+Secondly, the model caters directly to EDDIE.
+The eligible party's ability to manage permission requests translates into their capability to manipulate these requests.
+The process model implements this by introducing eligible party-specific states, such as the ``terminated state'' (described in subsection\ \ref{subsubsec:terminated-state}).
 
 \begin{figure}[h]
+    \centering
     \includegraphics[scale=0.3]{./assets/process-model}
     \caption{Process Model}
     \label{fig:process-model}
