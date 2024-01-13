@@ -1,25 +1,34 @@
 \section{Conclusion}\label{sec:conclusion}
-This section evaluates how the process model implemented in section\ \ref{sec:state-process-model-design} matches the permission process described in section\ \ref{sec:related-work}.
-Each permission process will be compared to the state process model.
-Furthermore, the skipped or replaced states are explained.
+This section describes the performance of the implemented process model and outlines future work.
 
-\subsection{Permission State Model in EDA's Permission Process}\label{subsec:permission-state-model-in-eda's-permission-process}
-EDAs permission process is the one that has the most states, since the eligible party is often notified about changes to the permission request.
-The states that EDAs permission process has match up with the permission process model without problems.
-Each state has a counterpart in the state process model described in the section\ \ref{sec:state-process-model-design}.
+The ``Clean Energy Package'' opened the possibility to access energy data from European Union member states
+and necessitated the development of an abstract model
+to gain permission to collect energy data from each country's permission administrators.
+In the previous sections, the permission processes of three such administrators were examined:
+Austria's EDA, France's Enedis, and Spain's Datadis.
+Additionally, the specific states and transitions of the permission process model were outlined and justified.
 
-\subsection{Permission State Model in ENEDIS' Permission Process}\label{subsec:permission-state-model-in-enedis'-permission-process}
-Enedis' permission process does not fit completely the state process model as it does not notify the eligible party about every state change.
-This can be fixed by sending the permission request first to the eligible party, which can validate it according to its terms and then send the permission request with the OAuth request to the OAuth server.
-That way it is possible to give the eligible party more control over the permission requests.
-This will prevent users and eligible parties from creating and accepting permission requests that are not fit for the eligible partys services.
+\subsection{Results}\label{subsec:results}
+The implementation of the process model shows promising results.
+It enhances the management of all permission processes and improves fault tolerance.
+For instance, when permission requests fail to be sent to the permission administrator, due to an error,
+they can be automatically reattempted.
+Initially, this model was only implemented for EDA, Enedis, and Datadis,
+and the states of these varied permission processes could be efficiently mapped without major complications.
 
-One state that cannot be reached in ENEDIS' permission process for the state process model is the invalid state, since the eligible party is never notified about validation errors.
+Implementing the permission processes with the state process model illustrated that some states could be streamlined,
+for example, the sent-to-permission-administrator state.
+This state is only explicitly present in the EDA
+as they issue a notification once the permission request has been acknowledged.
+Conversely, for other permission administrators, this state is not present.
 
+\subsection{Future Work}\label{subsec:future-work}
+Currently, the process model is implemented for only a few permission processes.
+The next phase involves expanding support to include permission administrators from other countries,
+such as Denmark's Energinet or Finland's Fingrid.
+The primary goal of our model is to integrate with permission processes across all European Union countries.
 
-\subsection{Permission State Model in Datadis' Permission Process}\label{subsec:permission-state-model-in-datadis'-permission-process}
-Datadis' permission process is the shortest of all the evaluated permission processes in the section\ \ref{sec:related-work}.
-It matches the least number of states and does not allow for much eligible party interaction.
-The eligible party is never even notified by Datadis that a permission request has been accepted.
-A workaround to still get this information is to let the user notify the eligible party by letting them click a button.
-
+When a new permission process is implemented with the process model,
+it is crucial to reevaluate the defined states and transitions.
+This examination ensures that each state is correctly implemented and understood,
+and identifies if any additional necessary states are missing.

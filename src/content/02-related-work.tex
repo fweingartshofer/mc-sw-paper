@@ -15,6 +15,10 @@ While the first two data types are self-explanatory, ``master data'' refers to a
 EDA is owned by all Austrian grid operators.
 Distinctively, unlike other permission administrators, EDA employs a push-based model rather than a pull-based one~\cite{eda}.
 
+EDAs permission process is the one that has the most states since the eligible party is often notified about changes to the permission request.
+The states that EDAs permission process has match up with the permission process model without problems.
+Each state has a counterpart in the state process model described in the section\ \ref{sec:state-process-model-design}.
+
 This push-based approach to energy consumption and production data implies several consequences.
 Primarily, if a permission request for energy data is approved,
 EDA will forward the energy data to the approved party via the AS4 protocol\cite{eda}.
@@ -65,6 +69,15 @@ Unlike Austria's EDA, France utilizes a pull-based model, as detailed in subsect
 ENEDIS employs a pull-based approach that allows the eligible party to retrieve data from an interface,
 such as a REST service.
 
+Enedis' permission process does not completely fit the state process model as it does not notify the eligible party about every state change.
+This can be fixed by sending the permission request first to the eligible party, which can validate it according to its terms and then send the permission request with the OAuth request to the OAuth server.
+That way it is possible to give the eligible party more control over the permission requests.
+This will prevent users and eligible parties from creating and accepting permission requests that are not fit for the eligible partys services.
+
+One state that cannot be reached in ENEDIS' permission process for the state process model is the timeout state,
+since the REST API will only return the HTTP unauthorized code,
+making it impossible to distinguish between timeouts and rejections.
+
 Figure\ \ref{fig:enedis-process-model} shows ENEDIS' permission process,
 which adheres to the OAuth 2.0 specification, specifically the authorization code grant scheme.
 Eligible parties must first register with ENEDIS to gain access to a specific set of APIs, termed as a ``scope''.
@@ -109,6 +122,11 @@ the only requisite for the permission request is a specified timeframe for reque
 Datadis serves as Spain's permission administrator.
 Similar to France's ENEDIS, they use a pull-based approach to access energy data of an end user.
 However, they do not implement OAuth 2.0~\cite{datadis-dev-guide}.
+
+Datadis' permission process is the shortest of all the evaluated permission processes.
+It matches the least number of states and does not allow for much eligible party interaction.
+The eligible party is never even notified by Datadis that a permission request has been accepted.
+A workaround to still get this information is to let the user notify the eligible party by letting them click a button.
 
 Datadis' approach to the permission request process is primarily based on JSON web tokens as API tokens.
 For the eligible party to access the end user data, they first have to acquire a token for themselves.

@@ -4,3 +4,36 @@ Our paper aims to explore different permission process models, strategically sel
 Specifically, energy data refers to the details of energy consumption, energy production, as well as the contractual nuances between end users and their Distribution System Operators(DSOs).
 Utilizing comparison-based analysis of the explored process models, we aim to develop a generalized state process model.
 The proposed state process model will include all the necessary states while bypassing those deemed unnecessary for the permission process~\cite{clean-energy}.
+
+The state process model is based on a finite state machine(FSM).
+An FSM consists of a finite set of states.
+Each state has transition messages, where it can be transitioned to another state.
+The FSM is transitioned based on external messages, and based on the outcome of the transition function,
+it can end up in one state.
+This ensures that the state process model is fault-tolerant,
+since faulty states can be recovered, either automatically by the system or by an administrator~\cite{asm}.
+
+The approach of the process model was chosen for its fault-tolerance,
+the ability to replay specific instances and the ability to clearly model real-world processes,
+which can differ in detail, but follow the same principles.
+
+The paper will describe how the permission processes work in three different countries: Austria, France and Spain.
+Furthermore,
+it will explain how their process can be mapped onto the state process model and which states can be bypassed.
+
+\subsection{Necessary States}\label{subsec:necessary-states}
+Each permission administrator implements the permission process differently, but all follow similar principles.
+First, a permission request has to be created and validated before it can be sent to the permission administrator.
+These are the created-state and validated-state respectively.
+An invalid permission request cannot be sent to the permission administrator, it requires the user to fix any mistakes.
+The permission request will be in the invalid-state.
+If the permission request is valid, it can be sent to the permission administrator.
+From whom an acknowledgement is awaited, either this acknowledgement.
+If the permission administrator is not available, the permission request is transitioned to the unable-to-send-state.
+This process can be retried later.
+After getting the acknowledgement is received, the permission request is transitioned into the acknowledged-state.
+Then the permission request will either be accepted, declined or runs into a time-out; these are all different states.
+The decline-state and the timeout-state are both terminal states and no transition is available anymore.
+After the permission request is accepted, it can run into a time limit,
+which means the permission was only valid for a finite period.
+This is also a final state.
